@@ -7,7 +7,7 @@ dir="/tmp/$uid"
 #region core functions
 download() {
     echo "Downloading $1"
-    {(
+    {
         local url=$1
         local path=$2
 
@@ -25,9 +25,10 @@ download() {
         mv "$extracted"/* "$path"
         rmdir "$extracted"
 
-    )} &> /dev/null
+    } &> /dev/null
 }
 #endregion
 
 download $url $dir
 ./setup-offline.sh $dir
+
