@@ -3,7 +3,6 @@ name="cloudflared"
 description="Cloudflare Tunnel"
 
 etc_dir="/etc/$name"
-lib_dir="/var/lib/$name"
 log_dir="/var/log/$name"
 run_dir="/run/$name"
 
@@ -28,11 +27,12 @@ start_pre() {
     fi
 
     checkpath -d -o $command_user -m755 \
-            $etc_dir
+        $log_dir \
+        $etc_dir
 
     checkpath -f -o $command_user -m644 \
-            $config \
-            $logfile
+        $config \
+        $logfile
 }
 
 start() {
