@@ -2,14 +2,10 @@
 name="cloudflared"
 description="Cloudflare Tunnel"
 
-etc_dir="/etc/$name"
-log_dir="/var/log/$name"
-run_dir="/run/$name"
-
 username="cloudflare"
 
-pidfile="$run_dir/$name.pid"
-logfile="$log_dir/$name.log"
+pidfile="/run/$name/$name.pid"
+logfile="/var/log/$name.log"
 
 command="/usr/bin/$name"
 command_user="$username:$username"
@@ -26,12 +22,7 @@ start_pre() {
         adduser -S -D -H -G $username $username
     fi
 
-    checkpath -d -o $command_user -m755 \
-        $log_dir \
-        $etc_dir
-
     checkpath -f -o $command_user -m644 \
-        $config \
         $logfile
 }
 

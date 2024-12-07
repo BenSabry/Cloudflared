@@ -1,8 +1,10 @@
 #!/bin/sh
 
 uid="BenSabry/Cloudflared"
+url="https://github.com/$uid/archive/refs/heads/main.zip"
+dir="/tmp/$uid"
 
-#region Helpers
+#region core functions
 download() {
     echo "Downloading $1"
     {(
@@ -57,14 +59,12 @@ copy() {
     elif [ -d "$src" ]; then
         # make sure destination path exists
         mkdir -p "$dst"
-        # check if a directory is not empty
-        if [ "$(ls -A "$src")" ]; then
-            # iterate over directory content
-            for item in "$src"/*; do
-                # recursively call the function with child item
-                copy "$item" "$dst/$(basename "$item")"
-            done
-        fi
+        # iterate over directory content
+        for item in "$src"/*; do
+            # recursively call the function with child item
+            copy "$item" "$dst/$(basename "$item")"
+        done
+
     else
         echo "Source $src is neither a file nor a directory."
         return 1
@@ -72,52 +72,43 @@ copy() {
 }
 #endregion
 
-#region Functions
+#region logic functions
 srcroot="$dir/content"
 dstroot="/"
-url="https://github.com/$uid/archive/refs/heads/main.zip"
-dir="/tmp/$uid"
 
-initialize() {
+presetup() {
     download $url $dir
 
     executable "*" "$srcroot/etc/init.d"
     executable "*" "$srcroot/etc/periodic"
-    executable "*" "$srcroot/scripts"
+    executable "*" "$srcroot/root/scripts"
     executable "*" "$dir/scripts"
 
     copy "$srcroot" "$dstroot"
 }
-run_scripts() {
+setup() {
     for item in "$dir"/scripts/*; do
         "$item" $@
     done
 }
-cleanup() {
-    rm -rf "$dir"
-    echo "Setup completed"
-}
+postsetup() {
+    copy "$srcroot" "$dstroot"
 
-register_services() {
+    # register and run init.d services
     for item in "$srcroot/etc/init.d"/*; do
         if [ -f "$item" -a -e "$item" ]; then
             local name="$(basename "$item")"
             rc-update add "$name" default
-        fi
-    done
-}
-restart_services() {
-    for item in "$srcroot/etc/init.d"/*; do
-        if [ -f "$item" -a -e "$item" ]; then
-            local name="$(basename "$item")"
             service "$name" restart &
         fi
     done
+
+    rm -rf "$dir"
 }
 #endregion
 
-initialize
-register_services
-run_scripts
-restart_services
-cleanup
+presetup
+setup
+postsetup
+
+echo "Setup completed"
