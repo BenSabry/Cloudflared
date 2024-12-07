@@ -88,7 +88,7 @@ presetup() {
 }
 setup() {
     for item in "$dir"/scripts/*; do
-        "$item"
+        "$item" $@
     done
 }
 postsetup() {

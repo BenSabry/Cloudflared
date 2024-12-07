@@ -9,3 +9,4 @@ wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudfla
 chmod +x /usr/bin/cloudflared
 
 # Install the tunnel
+echo $@
