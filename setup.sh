@@ -4,31 +4,23 @@ uid="BenSabry/Cloudflared"
 url="https://github.com/$uid/archive/refs/heads/main.zip"
 dir="/tmp/$uid"
 
-#region core functions
-download() {
-    echo "Downloading $1"
-    {
-        local url=$1
-        local path=$2
+echo "Downloading $1"
+{
+    rm -rf $dir
+    mkdir -p $dir
+    cd $dir
 
-        rm -rf $path
-        mkdir -p $path
-        cd $path
+    wget "$url"
 
-        wget "$url"
+    zipfile="$(ls "$dir/"*.zip | head -1)"
+    unzip $zipfile -d "$dir"
+    rm $zipfile
 
-        zipfile="$(ls "$path/"*.zip | head -1)"
-        unzip $zipfile -d "$path"
-        rm $zipfile
+    extracted="$(ls -d "$dir/"* | head -n 1)"
+    mv "$extracted"/* "$dir"
+    rmdir "$extracted"
 
-        extracted="$(ls -d "$path/"* | head -n 1)"
-        mv "$extracted"/* "$path"
-        rmdir "$extracted"
+} &> /dev/null
 
-    } &> /dev/null
-}
-#endregion
-
-download $url $dir
+chmod +x ./setup-offline.sh
 ./setup-offline.sh $dir
-
