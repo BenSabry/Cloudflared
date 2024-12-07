@@ -1,5 +1,7 @@
 #!/bin/sh
 
+echo "$TOKEN"
+
 uid="BenSabry/Cloudflared"
 url="https://github.com/$uid/archive/refs/heads/main.zip"
 dir="/tmp/$uid"
@@ -106,8 +108,6 @@ postsetup() {
     rm -rf "$dir"
 }
 #endregion
-
-echo $@
 
 presetup
 setup
