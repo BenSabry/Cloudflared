@@ -107,6 +107,8 @@ postsetup() {
 }
 #endregion
 
+echo $@
+
 presetup
 setup
 postsetup
