@@ -3,7 +3,7 @@ This repository aims to automate the installation of Unbound and Redis on a fres
 
 # Setup *alpine linux only
 ```SHELL
-wget -qO - https://raw.githubusercontent.com/BenSabry/Cloudflared/main/setup.sh | sh
+wget -qO- https://raw.githubusercontent.com/BenSabry/Cloudflared/main/setup.sh | TOKEN="TOKEN" sh
 ```
 
 # Screenshot of Unbound/Redis running
