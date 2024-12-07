@@ -99,7 +99,7 @@ postsetup() {
         if [ -f "$item" -a -e "$item" ]; then
             local name="$(basename "$item")"
             rc-update add "$name" default
-            service "$name" restart
+            service "$name" restart &
         fi
     done
 
