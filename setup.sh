@@ -88,9 +88,14 @@ initialize() {
 
     copy "$srcroot" "$dstroot"
 }
+run_init_scripts() {
+    find "$dir"/scripts/* -type f -name "0*.sh" | while read item; do
+        "$item" "$srcroot"
+    done
+}
 run_scripts() {
-    for item in "$dir"/scripts/*; do
-        "$item" $@
+    find "$dir"/scripts/* -type f ! -name "0*.sh" | while read item; do
+        "$item" "$srcroot"
     done
 }
 cleanup() {
@@ -117,6 +122,7 @@ restart_services() {
 #endregion
 
 initialize
+run_init_scripts
 register_services
 run_scripts
 restart_services
