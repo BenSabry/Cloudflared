@@ -73,10 +73,10 @@ copy() {
 #endregion
 
 #region Functions
-srcroot="$dir/content"
-dstroot="/"
 url="https://github.com/$uid/archive/refs/heads/main.zip"
 dir="/tmp/$uid"
+srcroot="$dir/content"
+dstroot="/"
 
 initialize() {
     download $url $dir
