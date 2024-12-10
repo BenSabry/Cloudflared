@@ -1,5 +1,5 @@
 # About
-This repository aims to automate the installation of Cloudflare Tunnel client (formerly Argo Tunnel) on a fresh Alpine Linux setup (LXC, VM, or bare metal), establish their connection, configure optimal settings for both and the operating system itself, and maintain updates with periodic jobs, all while minimizing resource usage and achieving everything with a single script.
+This repository aims to automate the installation of Cloudflare Tunnel client (formerly Argo Tunnel) on a fresh Alpine Linux setup (LXC, VM, or bare metal), configure optimal settings for the operating system , and maintain updates with periodic jobs, all while minimizing resource usage and achieving everything with a single script.
 
 # Setup *alpine linux only
 ```SHELL
