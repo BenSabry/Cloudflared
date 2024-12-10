@@ -1,5 +1,4 @@
 #!/bin/sh
-
 uid="BenSabry/Cloudflared"
 
 #region Helpers
@@ -88,42 +87,25 @@ initialize() {
 
     copy "$srcroot" "$dstroot"
 }
-run_init_scripts() {
-    find "$dir"/scripts/* -type f -name "0*.sh" | while read item; do
-        "$item" "$srcroot"
+setup() {
+    for item in "$dir"/scripts/*; do
+        "$item"
     done
 }
-run_scripts() {
-    find "$dir"/scripts/* -type f ! -name "0*.sh" | while read item; do
-        "$item" "$srcroot"
-    done
-}
-cleanup() {
-    rm -rf "$dir"
-    echo "Setup completed"
-}
-
-register_services() {
+finalize() {
     for item in "$srcroot/etc/init.d"/*; do
         if [ -f "$item" -a -e "$item" ]; then
             local name="$(basename "$item")"
             rc-update add "$name" default
-        fi
-    done
-}
-restart_services() {
-    for item in "$srcroot/etc/init.d"/*; do
-        if [ -f "$item" -a -e "$item" ]; then
-            local name="$(basename "$item")"
             service "$name" restart &
         fi
     done
+
+    # Cleanup
+    rm -rf "$dir"
 }
 #endregion
 
 initialize
-run_init_scripts
-register_services
-run_scripts
-restart_services
-cleanup
+setup
+finalize
