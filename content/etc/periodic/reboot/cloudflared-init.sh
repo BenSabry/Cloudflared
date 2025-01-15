@@ -4,6 +4,7 @@ echo "$(date) $0 $@"
 
 delay=60
 error="WRN No instances found"
+logs="/root"
 
 service cloudflared restart
 
@@ -15,5 +16,7 @@ while true; do
     else
         echo "$(date): cloudflared is running normally."
     fi
+
+    rm "$logs"/*.zip
     sleep $delay
 done
